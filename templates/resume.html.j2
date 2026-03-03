@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ contact.name }} — Resume</title>
+  <style>
+    @page {
+      size: letter;
+      margin: 0.60in 0.70in;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.4;
+      color: #1a1a1a;
+      background: #ffffff;
+    }
+
+    /* ── Header ── */
+    .header-rule {
+      border: none;
+      border-top: 3.5px solid #1a5fa8;
+      margin-bottom: 9px;
+    }
+
+    .header-name {
+      font-size: 22pt;
+      font-weight: 700;
+      color: #1a1a1a;
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+
+    .header-summary {
+      font-size: 9.5pt;
+      color: #3a3a3a;
+      margin-top: 4px;
+      margin-bottom: 5px;
+      line-height: 1.45;
+    }
+
+    .header-contact {
+      font-size: 9pt;
+      color: #555;
+    }
+
+    .header-contact .sep {
+      margin: 0 5px;
+      color: #bbb;
+    }
+
+    /* ── Sections ── */
+    .section {
+      margin-top: 11px;
+    }
+
+    .section-header {
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: #1a5fa8;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      border-bottom: 1.5px solid #1a5fa8;
+      padding-bottom: 2px;
+      margin-bottom: 7px;
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+
+    /* ── Skills ── */
+    .skills-row {
+      font-size: 10pt;
+      margin-bottom: 2px;
+      line-height: 1.4;
+    }
+
+    .skills-category {
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+
+    /* ── Experience ── */
+    .exp-entry {
+      margin-bottom: 9px;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .exp-company {
+      font-weight: 700;
+      font-size: 10.5pt;
+      color: #1a1a1a;
+    }
+
+    .exp-date-location {
+      font-size: 8.5pt;
+      color: #555;
+      font-variant: small-caps;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .exp-role {
+      font-style: italic;
+      color: #1a5fa8;
+      font-size: 10pt;
+      margin-top: 1px;
+      margin-bottom: 4px;
+    }
+
+    .exp-bullets {
+      padding-left: 15px;
+      margin: 0;
+    }
+
+    .exp-bullets li {
+      margin-bottom: 2px;
+      font-size: 10pt;
+      line-height: 1.4;
+    }
+
+    /* ── Education ── */
+    .edu-entry {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 3px;
+    }
+
+    .edu-left {
+      flex: 1;
+    }
+
+    .edu-institution {
+      font-weight: 700;
+      font-size: 10.5pt;
+    }
+
+    .edu-degrees {
+      font-style: italic;
+      font-size: 10pt;
+      color: #1a5fa8;
+      margin-top: 1px;
+    }
+
+    .edu-location {
+      font-size: 8.5pt;
+      color: #555;
+      font-variant: small-caps;
+      white-space: nowrap;
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<hr class="header-rule">
+<div class="header-name">{{ contact.name }}</div>
+<div class="header-summary">{{ summary }}</div>
+<div class="header-contact">
+  <span>{{ contact.phone }}</span>
+  <span class="sep">·</span>
+  <span>{{ contact.email }}</span>
+  {% if contact.location %}
+  <span class="sep">·</span>
+  <span>{{ contact.location }}</span>
+  {% endif %}
+  {% if contact.linkedin %}
+  <span class="sep">·</span>
+  <span>{{ contact.linkedin }}</span>
+  {% endif %}
+</div>
+
+<!-- ══ SKILLS ══ -->
+<div class="section">
+  <div class="section-header">Skills</div>
+  {% for cat in skills %}
+  <div class="skills-row">
+    <span class="skills-category">{{ cat.category }}:</span> {{ cat.skills }}
+  </div>
+  {% endfor %}
+</div>
+
+<!-- ══ EXPERIENCE ══ -->
+<div class="section">
+  <div class="section-header">Experience</div>
+  {% for role in experience %}
+  <div class="exp-entry">
+    <div class="exp-header">
+      <span class="exp-company">{{ role.company }}</span>
+      <span class="exp-date-location">{{ role.start_date }} – {{ role.end_date }} &nbsp;|&nbsp; {{ role.location }}</span>
+    </div>
+    <div class="exp-role">{{ role.role }}</div>
+    <ul class="exp-bullets">
+      {% for bullet in role.bullets %}
+      <li>{{ bullet }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- ══ EDUCATION ══ -->
+<div class="section">
+  <div class="section-header">Education</div>
+  {% for edu in education %}
+  <div class="edu-entry">
+    <div class="edu-left">
+      <div class="edu-institution">{{ edu.institution }}</div>
+      <div class="edu-degrees">{{ edu.degrees | join(' &nbsp;|&nbsp; ') }}</div>
+    </div>
+    <div class="edu-location">{{ edu.location }}</div>
+  </div>
+  {% endfor %}
+</div>
+
+</body>
+</html>

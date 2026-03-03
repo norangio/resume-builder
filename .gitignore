@@ -1,0 +1,14 @@
+.env
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+dist/
+output/
+drafts/
+.DS_Store
+.claude/
+
+# Career docs contain personal info — only example templates are tracked
+career_docs/*.md
+!career_docs/*.example.md

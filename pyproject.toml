@@ -1,0 +1,21 @@
+[project]
+name = "resume-builder"
+version = "0.1.0"
+description = "CLI tool to generate tailored PDF resumes from career docs using Claude"
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic>=0.40.0",
+    "jinja2>=3.1.0",
+    "playwright>=1.44.0",
+    "pydantic>=2.7.0",
+    "pydantic-settings>=2.3.0",
+    "python-dotenv>=1.0.0",
+    "rich>=13.0.0",
+]
+
+[project.scripts]
+resume-builder = "resume_builder.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

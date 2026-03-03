@@ -1,0 +1,28 @@
+TARGET JOB DESCRIPTION:
+===
+{{ job_description }}
+===
+
+CANDIDATE CAREER TIMELINE:
+===
+{{ career_timeline }}
+===
+
+CANDIDATE SKILLS AND ACHIEVEMENTS:
+===
+{{ skills_and_achievements }}
+===
+
+CANDIDATE BASE INFORMATION (copy these values exactly into the contact block — do not alter):
+- name: {{ candidate_name }}
+- email: {{ candidate_email }}
+- phone: {{ candidate_phone }}
+- location: {{ candidate_location }}
+{% if candidate_linkedin %}- linkedin: {{ candidate_linkedin }}{% endif %}
+
+JSON SCHEMA (your output must conform to this exactly):
+===
+{{ json_schema }}
+===
+
+Produce the tailored resume JSON now. Remember: respond with JSON only — no markdown, no explanation.
