@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Generating... — Resume Builder{% endblock %}
+{% block extra_head %}
+<meta http-equiv="refresh" content="3;url=/poll/{{ draft_id }}">
+{% endblock %}
+{% block content %}
+<div class="card" style="text-align:center; padding: 48px 20px;">
+    <div class="spinner"></div>
+    <h1 style="display:inline; vertical-align:middle;">Generating your resume...</h1>
+    <p class="help-text" style="margin-top:16px;">
+        Claude is reading the job description and selecting the most relevant experience from your career docs.
+        This usually takes 15–30 seconds.
+    </p>
+</div>
+{% endblock %}

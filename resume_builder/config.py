@@ -15,10 +15,10 @@ class Settings(BaseSettings):
     anthropic_api_key: str = Field(..., alias="ANTHROPIC_API_KEY")
     model: str = Field("claude-opus-4-6", alias="CLAUDE_MODEL")
 
-    candidate_name: str = Field(..., alias="CANDIDATE_NAME")
-    candidate_email: str = Field(..., alias="CANDIDATE_EMAIL")
-    candidate_phone: str = Field(..., alias="CANDIDATE_PHONE")
-    candidate_location: str = Field(..., alias="CANDIDATE_LOCATION")
+    candidate_name: str = Field("", alias="CANDIDATE_NAME")
+    candidate_email: str = Field("", alias="CANDIDATE_EMAIL")
+    candidate_phone: str = Field("", alias="CANDIDATE_PHONE")
+    candidate_location: str = Field("", alias="CANDIDATE_LOCATION")
     candidate_linkedin: str | None = Field(None, alias="CANDIDATE_LINKEDIN")
 
     career_docs_dir: Path = BASE_DIR / "career_docs"
