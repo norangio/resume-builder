@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Career Docs — Resume Builder{% endblock %}
+{% block content %}
+<h1>Your Career Docs</h1>
+<p class="help-text">
+    These are the raw materials Claude uses to build your resume.
+    Write in markdown — include everything, and Claude will pick what's relevant for each job.
+</p>
+
+<form method="post">
+    <div class="card">
+        <label for="timeline">Career Timeline</label>
+        <p class="help-text">Your full work history in reverse chronological order. Include company, title, dates, location, and bullet points for each role.</p>
+        <textarea id="timeline" name="timeline" rows="16">{{ timeline }}</textarea>
+    </div>
+
+    <div class="card">
+        <label for="skills">Skills &amp; Achievements</label>
+        <p class="help-text">Cross-cutting skills, certifications, education, patents, and notable achievements not tied to a single role.</p>
+        <textarea id="skills" name="skills" rows="12">{{ skills }}</textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-full">Save Career Docs</button>
+</form>
+{% endblock %}

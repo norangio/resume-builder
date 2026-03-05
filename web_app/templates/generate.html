@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Generate Resume — Resume Builder{% endblock %}
+{% block content %}
+<h1>Generate Resume</h1>
+
+{% if not has_docs %}
+<div class="banner banner-warning">
+    You haven't set up your career docs yet. <a href="/setup">Set them up now</a> — Claude needs them to build your resume.
+</div>
+{% endif %}
+
+{% if not has_profile_data %}
+<div class="banner banner-warning">
+    Your profile is incomplete. <a href="/profile">Add your contact info</a> so it appears on your resume.
+</div>
+{% endif %}
+
+<form method="post" class="card">
+    <label for="jd">Job Description</label>
+    <p class="help-text">Paste the full job posting. Claude will tailor your resume to match.</p>
+    <textarea id="jd" name="jd" rows="14" required placeholder="Paste the job description here..."></textarea>
+
+    <button type="submit" class="btn btn-primary btn-full" {% if not has_docs or not has_profile_data %}disabled title="Set up your career docs and profile first"{% endif %}>
+        Generate Resume
+    </button>
+</form>
+{% endblock %}

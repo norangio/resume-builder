@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}Review Draft — Resume Builder{% endblock %}
+{% block content %}
+<h1>Review &amp; Edit</h1>
+<p class="help-text">Edit anything below, then download your PDF.</p>
+
+<form method="post" action="/review/{{ draft_id }}">
+    <!-- Summary -->
+    <div class="card">
+        <h2 style="margin-top:0;">Summary</h2>
+        <textarea name="summary" rows="3">{{ draft.summary }}</textarea>
+    </div>
+
+    <!-- Skills -->
+    <div class="card" id="skills-section">
+        <h2 style="margin-top:0;">Skills</h2>
+        {% for skill in draft.skills %}
+        <div class="field-row field-group skill-row">
+            <div style="width:35%;">
+                <input type="text" name="skill_category" value="{{ skill.category }}" placeholder="Category">
+            </div>
+            <div class="field-grow">
+                <input type="text" name="skill_values" value="{{ skill.skills }}" placeholder="Comma-separated skills">
+            </div>
+            <button type="button" class="btn btn-danger remove-btn" onclick="this.parentElement.remove()">&times;</button>
+        </div>
+        {% endfor %}
+        <button type="button" class="btn btn-secondary" onclick="addSkillRow()">+ Add Skill Category</button>
+    </div>
+
+    <!-- Experience -->
+    {% for exp in draft.experience %}
+        {% set exp_idx = loop.index0 %}
+    <div class="card">
+        <div class="exp-header">
+            <div class="company">{{ exp.company }}</div>
+            <div class="role">{{ exp.role }}</div>
+            <div class="meta">{{ exp.start_date }} – {{ exp.end_date }} · {{ exp.location }}</div>
+        </div>
+        <!-- Hidden fields for the role metadata -->
+        <input type="hidden" name="exp_company" value="{{ exp.company }}">
+        <input type="hidden" name="exp_role" value="{{ exp.role }}">
+        <input type="hidden" name="exp_start_date" value="{{ exp.start_date }}">
+        <input type="hidden" name="exp_end_date" value="{{ exp.end_date }}">
+        <input type="hidden" name="exp_location" value="{{ exp.location }}">
+        <input type="hidden" name="exp_index" value="{{ loop.index0 }}">
+
+        <div class="bullets-container" data-exp-index="{{ loop.index0 }}">
+            {% for bullet in exp.bullets %}
+            <div class="bullet-row">
+                <textarea name="exp_bullet_{{ exp_idx }}" rows="2" style="flex:1;">{{ bullet }}</textarea>
+                <button type="button" class="btn btn-danger remove-btn" onclick="this.parentElement.remove()">&times;</button>
+            </div>
+            {% endfor %}
+        </div>
+        <button type="button" class="btn btn-secondary" style="margin-top:6px;" onclick="addBullet({{ loop.index0 }})">+ Add Bullet</button>
+    </div>
+    {% endfor %}
+
+    <!-- Education (read-only display) -->
+    <div class="card">
+        <h2 style="margin-top:0;">Education</h2>
+        {% for edu in draft.education %}
+        <div style="margin-bottom:8px;">
+            <strong>{{ edu.institution }}</strong> — {{ edu.location }}
+            {% for deg in edu.degrees %}
+            <div style="color:#666; font-size:14px;">{{ deg }}</div>
+            {% endfor %}
+        </div>
+        <!-- Pass education through as hidden fields -->
+        <input type="hidden" name="edu_institution" value="{{ edu.institution }}">
+        <input type="hidden" name="edu_location" value="{{ edu.location }}">
+        {% for deg in edu.degrees %}
+        <input type="hidden" name="edu_degrees_{{ loop.index0 }}" value="{{ deg }}">
+        {% endfor %}
+        <input type="hidden" name="edu_index" value="{{ loop.index0 }}">
+        <input type="hidden" name="edu_degree_count_{{ loop.index0 }}" value="{{ edu.degrees | length }}">
+        {% endfor %}
+    </div>
+
+    <button type="submit" class="btn btn-success btn-full" style="margin-top:8px; font-size:18px; padding:16px;">
+        Download PDF
+    </button>
+</form>
+
+<script>
+function addSkillRow() {
+    const section = document.getElementById('skills-section');
+    const btn = section.querySelector('.btn-secondary');
+    const row = document.createElement('div');
+    row.className = 'field-row field-group skill-row';
+    row.innerHTML = `
+        <div style="width:35%;">
+            <input type="text" name="skill_category" placeholder="Category">
+        </div>
+        <div class="field-grow">
+            <input type="text" name="skill_values" placeholder="Comma-separated skills">
+        </div>
+        <button type="button" class="btn btn-danger remove-btn" onclick="this.parentElement.remove()">&times;</button>
+    `;
+    section.insertBefore(row, btn);
+}
+
+function addBullet(expIndex) {
+    const container = document.querySelector(`.bullets-container[data-exp-index="${expIndex}"]`);
+    const row = document.createElement('div');
+    row.className = 'bullet-row';
+    row.innerHTML = `
+        <textarea name="exp_bullet_${expIndex}" rows="2" style="flex:1;" placeholder="Start with an action verb..."></textarea>
+        <button type="button" class="btn btn-danger remove-btn" onclick="this.parentElement.remove()">&times;</button>
+    `;
+    container.appendChild(row);
+}
+</script>
+{% endblock %}

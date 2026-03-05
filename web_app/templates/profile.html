@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Profile — Resume Builder{% endblock %}
+{% block content %}
+<h1>Your Profile</h1>
+<p class="help-text">This info appears in the contact header of your resume.</p>
+
+<form method="post" class="card">
+    <label for="name">Full Name</label>
+    <input type="text" id="name" name="name" value="{{ profile.get('name', '') }}" required>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" value="{{ profile.get('email', '') }}" required>
+
+    <label for="phone">Phone</label>
+    <input type="tel" id="phone" name="phone" value="{{ profile.get('phone', '') }}" required>
+
+    <label for="location">Location</label>
+    <input type="text" id="location" name="location" value="{{ profile.get('location', '') }}" placeholder="City, ST" required>
+
+    <label for="linkedin">LinkedIn URL <span style="font-weight:normal;color:#666">(optional)</span></label>
+    <input type="text" id="linkedin" name="linkedin" value="{{ profile.get('linkedin', '') }}" placeholder="linkedin.com/in/yourname">
+
+    <button type="submit" class="btn btn-primary btn-full">Save Profile</button>
+</form>
+{% endblock %}

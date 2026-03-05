@@ -9,6 +9,10 @@ drafts/
 .DS_Store
 .claude/
 
+# User data (profiles, credentials) — personal info
+users/
+users.json
+
 # Career docs contain personal info — only example templates are tracked
 career_docs/*.md
 !career_docs/*.example.md

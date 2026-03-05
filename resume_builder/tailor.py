@@ -51,9 +51,19 @@ def _remove_em_dashes(content: ResumeContent) -> ResumeContent:
     return ResumeContent.model_validate(data)
 
 
-def tailor_resume(job_description: str) -> ResumeContent:
+def tailor_resume(
+    job_description: str,
+    timeline: str | None = None,
+    skills_doc: str | None = None,
+    candidate_name: str | None = None,
+    candidate_email: str | None = None,
+    candidate_phone: str | None = None,
+    candidate_location: str | None = None,
+    candidate_linkedin: str | None = None,
+) -> ResumeContent:
     """Call Claude API with job description + career docs, return validated ResumeContent."""
-    timeline, skills_doc = _load_career_docs()
+    if timeline is None or skills_doc is None:
+        timeline, skills_doc = _load_career_docs()
 
     env = Environment(loader=FileSystemLoader(str(settings.prompts_dir)))
     user_tmpl = env.get_template("user_template.txt")
@@ -62,11 +72,11 @@ def tailor_resume(job_description: str) -> ResumeContent:
         career_timeline=timeline,
         skills_and_achievements=skills_doc,
         json_schema=json.dumps(ResumeContent.model_json_schema(), indent=2),
-        candidate_name=settings.candidate_name,
-        candidate_email=settings.candidate_email,
-        candidate_phone=settings.candidate_phone,
-        candidate_location=settings.candidate_location,
-        candidate_linkedin=settings.candidate_linkedin,
+        candidate_name=candidate_name or settings.candidate_name,
+        candidate_email=candidate_email or settings.candidate_email,
+        candidate_phone=candidate_phone or settings.candidate_phone,
+        candidate_location=candidate_location or settings.candidate_location,
+        candidate_linkedin=candidate_linkedin or settings.candidate_linkedin,
     )
 
     system_prompt = (settings.prompts_dir / "system.txt").read_text()
