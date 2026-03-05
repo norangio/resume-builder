@@ -141,6 +141,30 @@
         .bullet-row { display: flex; gap: 8px; align-items: start; margin-bottom: 6px; }
         .bullet-row textarea { margin-bottom: 0; }
         .bullet-row .btn-danger { flex-shrink: 0; align-self: center; }
+
+        @media (prefers-color-scheme: light) {
+            body { color: #0f172a; background: #f8fafc; }
+            nav { background: #ffffff; border-bottom-color: #e2e8f0; color: #0f172a; }
+            nav .brand { color: #0f172a; }
+            nav a { color: #475569; }
+            nav a:hover, nav a.active { color: #0f172a; }
+            h2 { color: #ea6c0a; }
+            .card { background: #ffffff; border-color: #e2e8f0; }
+            label { color: #475569; }
+            input[type="text"], input[type="email"], input[type="tel"], textarea {
+                border-color: #d1d5db; background: #ffffff; color: #0f172a;
+            }
+            .btn-secondary { background: #e2e8f0; color: #0f172a; }
+            .btn-secondary:hover { background: #cbd5e1; }
+            .banner-warning { background: #fffbeb; border-color: #fbbf24; color: #92400e; }
+            .banner-success { background: #f0fdf4; border-color: #86efac; color: #166534; }
+            .banner-error { background: #fef2f2; border-color: #fca5a5; color: #991b1b; }
+            .help-text { color: #64748b; }
+            .spinner { border-color: #e2e8f0; border-top-color: #f97316; }
+            .exp-header { background: #f1f5f9; border-color: #e2e8f0; }
+            .exp-header .role { color: #0f172a; }
+            .exp-header .meta { color: #64748b; }
+        }
     </style>
     {% block extra_head %}{% endblock %}
 </head>

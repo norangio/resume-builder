@@ -82,7 +82,9 @@ python -m resume_builder.cli --jd "..." --html-only
 
 **If bullet selection isn't relevant enough**: Edit `resume_builder/prompts/system.txt` — particularly the rules around relevance and omission.
 
-**To change the visual style**: Edit `templates/resume.html.j2`. The blue accent color is `#1a5fa8`. Use `--html-only` to iterate quickly without Playwright.
+**To change the web UI visual style**: Edit `web_app/templates/base.html`. Dark theme uses `#0f172a`/`#1e293b` backgrounds and `#f97316` orange accent; light mode is handled via `prefers-color-scheme: light` media query in the same file.
+
+**To change the PDF resume style**: Edit `templates/resume.html.j2`. The accent color there is `#1a5fa8` (blue — intentionally different from the web UI; PDFs are professional documents). Use `--html-only` to iterate quickly without Playwright.
 
 ## Web App
 
@@ -97,20 +99,17 @@ Per-user data lives in `users/<username>/` — profile, career docs, and drafts 
 - **Reverse proxy**: Caddy (auto-HTTPS, config at `/etc/caddy/Caddyfile`)
 - **Service**: `systemctl status resume-builder` — auto-starts on reboot
 - **App location**: `/opt/resume-builder/` on the server
+- **Deploy**: run `./deploy.sh` locally — pushes to GitHub, pulls on the server, restarts the service
 - **Useful commands**:
   ```bash
-  # SSH in (replace SERVER_IP with actual IP)
-  ssh root@SERVER_IP
-
   # View logs
   journalctl -u resume-builder -f
 
-  # Deploy updates
-  cd /opt/resume-builder && git pull && systemctl restart resume-builder
-
-  # Add a user
-  source .venv/bin/activate && python add_user.py <username> <password>
+  # Add a user (run on server)
+  cd /opt/resume-builder && source .venv/bin/activate && python add_user.py <username> <password>
   ```
+
+<!-- TODO: Set up GitHub Actions to auto-deploy on push to main (git pull on server + restart service) -->
 
 ## Important Constraints
 
