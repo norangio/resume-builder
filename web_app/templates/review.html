@@ -30,6 +30,7 @@
 
     <!-- Experience -->
     {% for exp in draft.experience %}
+        {% set exp_idx = loop.index0 %}
     <div class="card">
         <div class="exp-header">
             <div class="company">{{ exp.company }}</div>
@@ -47,7 +48,7 @@
         <div class="bullets-container" data-exp-index="{{ loop.index0 }}">
             {% for bullet in exp.bullets %}
             <div class="bullet-row">
-                <textarea name="exp_bullet_{{ loop.index0 }}" rows="2" style="flex:1;">{{ bullet }}</textarea>
+                <textarea name="exp_bullet_{{ exp_idx }}" rows="2" style="flex:1;">{{ bullet }}</textarea>
                 <button type="button" class="btn btn-danger remove-btn" onclick="this.parentElement.remove()">&times;</button>
             </div>
             {% endfor %}
