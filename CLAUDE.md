@@ -92,15 +92,15 @@ Per-user data lives in `users/<username>/` — profile, career docs, and drafts 
 
 ## VPS Deployment
 
-- **Server**: Hetzner CX23, Ashburn VA, `5.78.109.38`
+- **Server**: Hetzner CX23, Ashburn VA (IP in private notes)
 - **Domain**: `norangio.dev` via Cloudflare (DNS + proxy)
 - **Reverse proxy**: Caddy (auto-HTTPS, config at `/etc/caddy/Caddyfile`)
 - **Service**: `systemctl status resume-builder` — auto-starts on reboot
 - **App location**: `/opt/resume-builder/` on the server
 - **Useful commands**:
   ```bash
-  # SSH in
-  ssh root@5.78.109.38
+  # SSH in (replace SERVER_IP with actual IP)
+  ssh root@SERVER_IP
 
   # View logs
   journalctl -u resume-builder -f
