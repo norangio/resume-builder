@@ -4,6 +4,12 @@ Generates tailored, two-page PDF resumes using Claude. You provide your career h
 
 Available as a **CLI tool** for local use or a **web app** you can host and access from any device (iPad, phone, laptop).
 
+## Live Instance
+
+A hosted instance is running at **[resume.norangio.dev](https://resume.norangio.dev)**.
+
+It's invite-only — if you'd like access, reach out to me directly for a login. Note that each resume generation makes a paid Claude API call, so I ask that you only use it for genuine job applications.
+
 ## How It Works
 
 1. You paste a job description
