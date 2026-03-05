@@ -4,7 +4,9 @@ Guidance for Claude Code when working in this project.
 
 ## What This Project Does
 
-CLI tool that generates tailored, two-page PDF resumes from a user's career docs, customized to a specific job posting using Claude. The user is always in the loop — Claude produces a JSON draft they review and edit before the PDF is rendered.
+CLI tool and web app that generates tailored, two-page PDF resumes from a user's career docs, customized to a specific job posting using Claude. The user is always in the loop — Claude produces a JSON draft they review and edit before the PDF is rendered.
+
+The web app is live at **resume.norangio.dev** (invite-only), hosted on a Hetzner CX23 VPS behind Caddy and Cloudflare DNS.
 
 ## Architecture
 
@@ -35,6 +37,12 @@ output/resume_<timestamp>.pdf
 | `templates/resume.html.j2` | HTML resume template — edit this to adjust visual layout |
 | `resume_builder/config.py` | All paths and settings, loaded from `.env` |
 | `career_docs/` | User's career history markdown files (gitignored; example templates tracked) |
+| `web_app/app.py` | FastAPI web app — all routes for the browser-based workflow |
+| `web_app/auth.py` | HTTP Basic Auth handling |
+| `web_app/user_data.py` | Per-user profile and career doc storage (flat files under `users/`) |
+| `web_app/templates/` | Mobile-first HTML templates for the web UI |
+| `add_user.py` | CLI helper to create web app user accounts |
+| `run_web.py` | Web app entry point (`uvicorn` on port 8000) |
 
 ## Environment Setup
 
@@ -75,6 +83,34 @@ python -m resume_builder.cli --jd "..." --html-only
 **If bullet selection isn't relevant enough**: Edit `resume_builder/prompts/system.txt` — particularly the rules around relevance and omission.
 
 **To change the visual style**: Edit `templates/resume.html.j2`. The blue accent color is `#1a5fa8`. Use `--html-only` to iterate quickly without Playwright.
+
+## Web App
+
+Run locally with `python run_web.py` → `http://localhost:8000`. Create users with `python add_user.py <username> <password>`.
+
+Per-user data lives in `users/<username>/` — profile, career docs, and drafts are all isolated per account.
+
+## VPS Deployment
+
+- **Server**: Hetzner CX23, Ashburn VA, `5.78.109.38`
+- **Domain**: `norangio.dev` via Cloudflare (DNS + proxy)
+- **Reverse proxy**: Caddy (auto-HTTPS, config at `/etc/caddy/Caddyfile`)
+- **Service**: `systemctl status resume-builder` — auto-starts on reboot
+- **App location**: `/opt/resume-builder/` on the server
+- **Useful commands**:
+  ```bash
+  # SSH in
+  ssh root@5.78.109.38
+
+  # View logs
+  journalctl -u resume-builder -f
+
+  # Deploy updates
+  cd /opt/resume-builder && git pull && systemctl restart resume-builder
+
+  # Add a user
+  source .venv/bin/activate && python add_user.py <username> <password>
+  ```
 
 ## Important Constraints
 
