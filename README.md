@@ -333,6 +333,25 @@ SKIP_PUSH=1 ./deploy.sh main
 bash /opt/resume-builder/deploy/server-deploy.sh main
 ```
 
+### GitHub Actions Auto Deploy
+
+`.github/workflows/deploy.yml` deploys automatically on pushes to `main` (and supports manual runs).
+
+Required repository secrets:
+- `VPS_HOST` (example: `5.78.109.38`)
+- `VPS_USER` (example: `root`)
+- `VPS_SSH_KEY` (private key content used by Actions)
+
+One-time key setup:
+```bash
+# local machine
+ssh-keygen -t ed25519 -f ~/.ssh/github-actions-hetzner -C "github-actions-deploy"
+
+# server
+cat ~/.ssh/github-actions-hetzner.pub | ssh root@5.78.109.38 'cat >> /root/.ssh/authorized_keys'
+```
+Then paste `~/.ssh/github-actions-hetzner` (private key) into the `VPS_SSH_KEY` secret.
+
 ### Useful Commands
 
 ```bash

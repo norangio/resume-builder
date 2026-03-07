@@ -100,6 +100,8 @@ Per-user data lives in `users/<username>/` — profile, career docs, and drafts 
 - **Service**: `systemctl status resume-builder` — auto-starts on reboot
 - **App location**: `/opt/resume-builder/` on the server
 - **Deploy**: run `./deploy.sh` locally — pushes to GitHub, then runs `/opt/resume-builder/deploy/server-deploy.sh` on the VPS
+- **GitHub Actions auto-deploy**: `.github/workflows/deploy.yml` on push to `main`
+- **Required GitHub secrets**: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`
 - **Useful commands**:
   ```bash
   # View logs
@@ -108,8 +110,6 @@ Per-user data lives in `users/<username>/` — profile, career docs, and drafts 
   # Add a user (run on server)
   cd /opt/resume-builder && source .venv/bin/activate && python add_user.py <username> <password>
   ```
-
-<!-- TODO: Set up GitHub Actions to auto-deploy on push to main (SSH + deploy/server-deploy.sh main) -->
 
 ## Important Constraints
 
