@@ -28,11 +28,11 @@ if [ ! -d \"$REMOTE/.git\" ]; then
   echo \"→ Bootstrapping git repo at $REMOTE\"
   mkdir -p \"$REMOTE\"
   git -C \"$REMOTE\" init
-  if git -C \"$REMOTE\" remote get-url origin >/dev/null 2>&1; then
-    git -C \"$REMOTE\" remote set-url origin \"$REPO_URL\"
-  else
-    git -C \"$REMOTE\" remote add origin \"$REPO_URL\"
-  fi
+fi
+if git -C \"$REMOTE\" remote get-url origin >/dev/null 2>&1; then
+  git -C \"$REMOTE\" remote set-url origin \"$REPO_URL\"
+else
+  git -C \"$REMOTE\" remote add origin \"$REPO_URL\"
 fi
 git config --global --add safe.directory \"$REMOTE\"
 git -C \"$REMOTE\" fetch origin \"$BRANCH\"
