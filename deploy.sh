@@ -3,6 +3,9 @@
 # Usage: ./deploy.sh [branch]
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
 SERVER="${SERVER:-root@5.78.109.38}"
 REMOTE="${REMOTE:-/opt/resume-builder}"
 BRANCH="${1:-$(git rev-parse --abbrev-ref HEAD)}"
