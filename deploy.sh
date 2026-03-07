@@ -36,7 +36,12 @@ else
 fi
 git config --global --add safe.directory \"$REMOTE\"
 git -C \"$REMOTE\" fetch origin \"$BRANCH\"
-git -C \"$REMOTE\" checkout -f \"$BRANCH\"
+if git -C \"$REMOTE\" show-ref --verify --quiet \"refs/heads/$BRANCH\"; then
+  git -C \"$REMOTE\" checkout \"$BRANCH\"
+else
+  git -C \"$REMOTE\" checkout -b \"$BRANCH\" \"origin/$BRANCH\"
+fi
+git -C \"$REMOTE\" reset --hard \"origin/$BRANCH\"
 bash \"$REMOTE/deploy/server-deploy.sh\" \"$BRANCH\"
 "
 
