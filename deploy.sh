@@ -1,15 +1,23 @@
-#!/bin/bash
-# Deploy resume-builder to production.
-# Usage: ./deploy.sh
-set -e
+#!/usr/bin/env bash
+# Deploy resume-builder to production using GitHub as the source of truth.
+# Usage: ./deploy.sh [branch]
+set -euo pipefail
 
-SERVER="root@5.78.109.38"
-REMOTE="/opt/resume-builder"
+SERVER="${SERVER:-root@5.78.109.38}"
+REMOTE="${REMOTE:-/opt/resume-builder}"
+BRANCH="${1:-$(git rev-parse --abbrev-ref HEAD)}"
 
-echo "→ Pushing to GitHub..."
-git push
+if [[ ! "$BRANCH" =~ ^[A-Za-z0-9._/-]+$ ]]; then
+  echo "Invalid branch name: $BRANCH" >&2
+  exit 1
+fi
 
-echo "→ Pulling on server and restarting..."
-ssh $SERVER "cd $REMOTE && git pull && systemctl restart resume-builder"
+if [[ "${SKIP_PUSH:-0}" != "1" ]]; then
+  echo "→ Pushing $BRANCH to GitHub..."
+  git push origin "$BRANCH"
+fi
+
+echo "→ Pulling latest code on VPS and deploying..."
+ssh "$SERVER" "bash $REMOTE/deploy/server-deploy.sh $BRANCH"
 
 echo "✓ Deployed to https://resume.norangio.dev"

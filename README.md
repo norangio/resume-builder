@@ -312,6 +312,27 @@ systemctl start resume-builder
 2. You should see a login prompt — enter the credentials you created
 3. Set up your profile and career docs, then try generating a resume
 
+### Deploying New Code
+
+Deployments use GitHub as the source of truth.
+
+```bash
+# From your local clone: push current branch, then deploy that branch
+./deploy.sh
+
+# Deploy a specific branch
+./deploy.sh main
+
+# Skip local push (useful in CI/CD where code is already on GitHub)
+SKIP_PUSH=1 ./deploy.sh main
+```
+
+`./deploy.sh` SSHes to the server and runs:
+
+```bash
+bash /opt/resume-builder/deploy/server-deploy.sh main
+```
+
 ### Useful Commands
 
 ```bash
@@ -321,8 +342,8 @@ systemctl status resume-builder
 # View logs
 journalctl -u resume-builder -f
 
-# Restart after pulling code updates
-cd /opt/resume-builder && git pull && systemctl restart resume-builder
+# Deploy latest main directly on server
+bash /opt/resume-builder/deploy/server-deploy.sh main
 
 # Add a new user
 cd /opt/resume-builder && source .venv/bin/activate && python add_user.py newuser password
