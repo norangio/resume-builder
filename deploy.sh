@@ -34,6 +34,7 @@ if [ ! -d \"$REMOTE/.git\" ]; then
     git -C \"$REMOTE\" remote add origin \"$REPO_URL\"
   fi
 fi
+git config --global --add safe.directory \"$REMOTE\"
 git -C \"$REMOTE\" fetch origin \"$BRANCH\"
 git -C \"$REMOTE\" checkout -f \"$BRANCH\"
 bash \"$REMOTE/deploy/server-deploy.sh\" \"$BRANCH\"
