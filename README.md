@@ -140,6 +140,8 @@ Open `http://localhost:8000` in a browser. You'll be prompted to log in, then:
 
 After initial setup, the typical flow is just: paste job description, generate, review, download.
 
+The review screen uses a wider desktop layout and larger default editing fields so longer summaries, skill lists, and bullets are easier to inspect before exporting.
+
 ### Adding More Users
 
 ```bash

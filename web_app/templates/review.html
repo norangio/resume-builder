@@ -1,26 +1,71 @@
 {% extends "base.html" %}
 {% block title %}Review Draft — Resume Builder{% endblock %}
+{% block extra_head %}
+<style>
+    main {
+        max-width: 1040px;
+    }
+
+    .review-card textarea {
+        min-height: 120px;
+    }
+
+    .review-card .bullet-row textarea {
+        min-height: 96px;
+    }
+
+    .skill-row {
+        align-items: stretch;
+    }
+
+    .skill-category-field {
+        width: 28%;
+        min-width: 220px;
+    }
+
+    .skill-values-field {
+        min-height: 88px;
+        margin-bottom: 0;
+    }
+
+    @media (max-width: 720px) {
+        .skill-row {
+            flex-direction: column;
+        }
+
+        .skill-category-field {
+            width: 100%;
+            min-width: 0;
+        }
+    }
+</style>
+{% endblock %}
 {% block content %}
 <h1>Review &amp; Edit</h1>
 <p class="help-text">Edit anything below, then download your PDF.</p>
 
 <form method="post" action="/review/{{ draft_id }}">
     <!-- Summary -->
-    <div class="card">
+    <div class="card review-card">
         <h2 style="margin-top:0;">Summary</h2>
-        <textarea name="summary" rows="3">{{ draft.summary }}</textarea>
+        <textarea name="summary" rows="5">{{ draft.summary }}</textarea>
     </div>
 
     <!-- Skills -->
-    <div class="card" id="skills-section">
+    <div class="card review-card" id="skills-section">
         <h2 style="margin-top:0;">Skills</h2>
         {% for skill in draft.skills %}
         <div class="field-row field-group skill-row">
-            <div style="width:35%;">
+            <div class="skill-category-field">
                 <input type="text" name="skill_category" value="{{ skill.category }}" placeholder="Category">
             </div>
             <div class="field-grow">
-                <input type="text" name="skill_values" value="{{ skill.skills }}" placeholder="Comma-separated skills">
+                <textarea
+                    name="skill_values"
+                    rows="3"
+                    class="skill-values-field"
+                    placeholder="Comma-separated skills"
+                >{{ skill.skills }}</textarea>
             </div>
             <button type="button" class="btn btn-danger remove-btn" onclick="this.parentElement.remove()">&times;</button>
         </div>
@@ -31,7 +76,7 @@
     <!-- Experience -->
     {% for exp in draft.experience %}
         {% set exp_idx = loop.index0 %}
-    <div class="card">
+    <div class="card review-card">
         <div class="exp-header">
             <div class="company">{{ exp.company }}</div>
             <div class="role">{{ exp.role }}</div>
@@ -48,7 +93,7 @@
         <div class="bullets-container" data-exp-index="{{ loop.index0 }}">
             {% for bullet in exp.bullets %}
             <div class="bullet-row">
-                <textarea name="exp_bullet_{{ exp_idx }}" rows="2" style="flex:1;">{{ bullet }}</textarea>
+                <textarea name="exp_bullet_{{ exp_idx }}" rows="4" style="flex:1;">{{ bullet }}</textarea>
                 <button type="button" class="btn btn-danger remove-btn" onclick="this.parentElement.remove()">&times;</button>
             </div>
             {% endfor %}
@@ -90,11 +135,16 @@ function addSkillRow() {
     const row = document.createElement('div');
     row.className = 'field-row field-group skill-row';
     row.innerHTML = `
-        <div style="width:35%;">
+        <div class="skill-category-field">
             <input type="text" name="skill_category" placeholder="Category">
         </div>
         <div class="field-grow">
-            <input type="text" name="skill_values" placeholder="Comma-separated skills">
+            <textarea
+                name="skill_values"
+                rows="3"
+                class="skill-values-field"
+                placeholder="Comma-separated skills"
+            ></textarea>
         </div>
         <button type="button" class="btn btn-danger remove-btn" onclick="this.parentElement.remove()">&times;</button>
     `;
@@ -106,7 +156,7 @@ function addBullet(expIndex) {
     const row = document.createElement('div');
     row.className = 'bullet-row';
     row.innerHTML = `
-        <textarea name="exp_bullet_${expIndex}" rows="2" style="flex:1;" placeholder="Start with an action verb..."></textarea>
+        <textarea name="exp_bullet_${expIndex}" rows="4" style="flex:1;" placeholder="Start with an action verb..."></textarea>
         <button type="button" class="btn btn-danger remove-btn" onclick="this.parentElement.remove()">&times;</button>
     `;
     container.appendChild(row);

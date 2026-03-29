@@ -92,6 +92,8 @@ Run locally with `python run_web.py` → `http://localhost:8000`. Create users w
 
 Per-user data lives in `users/<username>/` — profile, career docs, and drafts are all isolated per account.
 
+The review step uses a wider desktop layout with larger default textareas for summary, skills, and experience bullets so long edits are easier to make without constant manual resizing.
+
 ## VPS Deployment
 
 - **Server**: Hetzner CX23, Ashburn VA (IP in private notes)
