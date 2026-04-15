@@ -6,7 +6,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
-SERVER="${SERVER:-root@5.78.109.38}"
+SERVER="${SERVER:?Set SERVER env var (e.g. user@your-host)}"
 REMOTE="${REMOTE:-/opt/resume-builder}"
 BRANCH="${1:-$(git rev-parse --abbrev-ref HEAD)}"
 REPO_URL="${REPO_URL:-$(git config --get remote.origin.url)}"
@@ -45,4 +45,4 @@ git -C \"$REMOTE\" reset --hard \"origin/$BRANCH\"
 bash \"$REMOTE/deploy/server-deploy.sh\" \"$BRANCH\"
 "
 
-echo "✓ Deployed to https://resume.norangio.dev"
+echo "✓ Deploy complete"

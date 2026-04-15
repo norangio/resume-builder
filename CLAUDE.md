@@ -6,7 +6,7 @@ Guidance for Claude Code when working in this project.
 
 CLI tool and web app that generates tailored, two-page PDF resumes from a user's career docs, customized to a specific job posting using Claude. The user is always in the loop — Claude produces a JSON draft they review and edit before the PDF is rendered.
 
-The web app is live at **resume.norangio.dev** (invite-only), hosted on a Hetzner CX23 VPS behind Caddy and Cloudflare DNS.
+The web app can be self-hosted on any VPS behind a reverse proxy (e.g. Caddy) with HTTPS.
 
 ## Architecture
 
@@ -96,12 +96,9 @@ The review step uses a wider desktop layout with larger default textareas for su
 
 ## VPS Deployment
 
-- **Server**: Hetzner CX23, Ashburn VA (IP in private notes)
-- **Domain**: `norangio.dev` via Cloudflare (DNS + proxy)
-- **Reverse proxy**: Caddy (auto-HTTPS, config at `/etc/caddy/Caddyfile`)
+- **Reverse proxy**: Caddy recommended (auto-HTTPS, config at `/etc/caddy/Caddyfile`)
 - **Service**: `systemctl status resume-builder` — auto-starts on reboot
-- **App location**: `/opt/resume-builder/` on the server
-- **Deploy**: run `./deploy.sh` locally — pushes to GitHub, then runs `/opt/resume-builder/deploy/server-deploy.sh` on the VPS
+- **Deploy**: run `SERVER=user@your-host ./deploy.sh` locally — pushes to GitHub, then runs `deploy/server-deploy.sh` on the server
 - **GitHub Actions auto-deploy**: `.github/workflows/deploy.yml` on push to `main`
 - **Required GitHub secrets**: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`
 - **Useful commands**:

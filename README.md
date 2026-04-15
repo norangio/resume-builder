@@ -6,9 +6,7 @@ Available as a **CLI tool** for local use or a **web app** you can host and acce
 
 ## Live Instance
 
-A hosted instance is running at **[resume.norangio.dev](https://resume.norangio.dev)**.
-
-It's invite-only — if you'd like access, reach out to me directly for a login. Note that each resume generation makes a paid Claude API call, so I ask that you only use it for genuine job applications.
+You can self-host this on any VPS. See the [deployment section](#deployment) below for setup instructions.
 
 ## How It Works
 
@@ -340,17 +338,17 @@ bash /opt/resume-builder/deploy/server-deploy.sh main
 `.github/workflows/deploy.yml` deploys automatically on pushes to `main` (and supports manual runs).
 
 Required repository secrets:
-- `VPS_HOST` (example: `5.78.109.38`)
-- `VPS_USER` (example: `root`)
-- `VPS_SSH_KEY` (private key content used by Actions)
+- `VPS_HOST` — your server's IP or hostname
+- `VPS_USER` — SSH user (e.g. `root`)
+- `VPS_SSH_KEY` — private key content used by Actions
 
 One-time key setup:
 ```bash
 # local machine
-ssh-keygen -t ed25519 -f ~/.ssh/github-actions-hetzner -C "github-actions-deploy"
+ssh-keygen -t ed25519 -f ~/.ssh/github-actions-deploy -C "github-actions-deploy"
 
 # server
-cat ~/.ssh/github-actions-hetzner.pub | ssh root@5.78.109.38 'cat >> /root/.ssh/authorized_keys'
+cat ~/.ssh/github-actions-deploy.pub | ssh user@your-host 'cat >> ~/.ssh/authorized_keys'
 ```
 Then paste `~/.ssh/github-actions-hetzner` (private key) into the `VPS_SSH_KEY` secret.
 
