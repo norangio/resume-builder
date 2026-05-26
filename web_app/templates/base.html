@@ -6,6 +6,7 @@
     <title>{% block title %}Resume Builder · norangio{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta name="color-scheme" content="light dark">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,10 +29,15 @@
             --danger: #e11d48;
             --positive-bg: #ecfdf5;
             --positive-border: #a7f3d0;
+            --positive-text: #064e3b;
             --warning-bg: #fffbeb;
             --warning-border: #fcd34d;
+            --warning-text: #78350f;
             --danger-bg: #fff1f2;
             --danger-border: #fecaca;
+            --danger-text: #881337;
+            --btn-primary-hover: #2a2522;
+            --btn-success-hover: #059669;
             --shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
             --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.06);
             --radius: 12px;
@@ -39,6 +45,39 @@
             --radius-pill: 999px;
             --font: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
             --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-base: #0c0a09;
+                --bg-surface: #1c1917;
+                --bg-surface-hover: #292524;
+                --bg-subtle: #0c0a09;
+                --border: #292524;
+                --border-strong: #44403c;
+                --border-subtle: #1c1917;
+                --text-primary: #fafaf9;
+                --text-secondary: #d6d3d1;
+                --text-muted: #a8a29e;
+                --text-faint: #78716c;
+                --accent: #fafaf9;
+                --positive: #34d399;
+                --warning: #fbbf24;
+                --danger: #fb7185;
+                --positive-bg: rgba(16, 185, 129, 0.12);
+                --positive-border: rgba(16, 185, 129, 0.35);
+                --positive-text: #6ee7b7;
+                --warning-bg: rgba(217, 119, 6, 0.14);
+                --warning-border: rgba(217, 119, 6, 0.4);
+                --warning-text: #fcd34d;
+                --danger-bg: rgba(225, 29, 72, 0.14);
+                --danger-border: rgba(225, 29, 72, 0.4);
+                --danger-text: #fda4af;
+                --btn-primary-hover: #e7e5e4;
+                --btn-success-hover: #10b981;
+                --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+                --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.5);
+            }
         }
 
         body {
@@ -196,7 +235,7 @@
         input:focus, textarea:focus {
             outline: none;
             border-color: var(--text-primary);
-            box-shadow: 0 0 0 3px rgba(28, 25, 23, 0.08);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--text-primary) 12%, transparent);
         }
 
         .btn {
@@ -222,7 +261,7 @@
             background: var(--text-primary);
             color: var(--bg-surface);
         }
-        .btn-primary:hover { background: #2a2522; }
+        .btn-primary:hover { background: var(--btn-primary-hover); color: var(--bg-surface); }
         .btn-primary:disabled {
             background: var(--bg-surface-hover);
             color: var(--text-faint);
@@ -233,7 +272,7 @@
             background: var(--positive);
             color: white;
         }
-        .btn-success:hover { background: #059669; }
+        .btn-success:hover { background: var(--btn-success-hover); }
 
         .btn-danger {
             background: var(--bg-surface);
@@ -290,21 +329,21 @@
         .banner-warning {
             background: var(--warning-bg);
             border-color: var(--warning-border);
-            color: #78350f;
+            color: var(--warning-text);
         }
         .banner-warning::before { background: var(--warning); }
 
         .banner-success {
             background: var(--positive-bg);
             border-color: var(--positive-border);
-            color: #064e3b;
+            color: var(--positive-text);
         }
         .banner-success::before { background: var(--positive); }
 
         .banner-error {
             background: var(--danger-bg);
             border-color: var(--danger-border);
-            color: #881337;
+            color: var(--danger-text);
         }
         .banner-error::before { background: var(--danger); }
 
