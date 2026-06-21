@@ -42,7 +42,7 @@ output/resume_<timestamp>.pdf
 | `web_app/user_data.py` | Per-user profile and career doc storage (flat files under `users/`) |
 | `web_app/templates/` | Mobile-first HTML templates for the web UI |
 | `add_user.py` | CLI helper to create web app user accounts |
-| `run_web.py` | Web app entry point (`uvicorn` on port 8000) |
+| `run_web.py` | Web app entry point (`uvicorn` on `127.0.0.1:8000`) |
 
 ## Environment Setup
 
@@ -88,7 +88,7 @@ python -m resume_builder.cli --jd "..." --html-only
 
 ## Web App
 
-Run locally with `python run_web.py` → `http://localhost:8000`. Create users with `python add_user.py <username> <password>`.
+Run locally with `python run_web.py` → `http://localhost:8000`. The web process binds to `127.0.0.1:8000` so production access goes through Caddy instead of exposing the backend port directly. Create users with `python add_user.py <username> <password>`.
 
 Per-user data lives in `users/<username>/` — profile, career docs, and drafts are all isolated per account.
 

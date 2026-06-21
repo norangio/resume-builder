@@ -125,10 +125,10 @@ python add_user.py yourname yourpassword
 
 # 3. Start the server
 python run_web.py
-# → Running on http://0.0.0.0:8000
+# → Running on http://127.0.0.1:8000
 ```
 
-Open `http://localhost:8000` in a browser. You'll be prompted to log in, then:
+Open `http://localhost:8000` in a browser. The server binds to loopback only, which keeps production access behind Caddy instead of exposing port 8000 directly. You'll be prompted to log in, then:
 
 1. **Profile** — enter your name, email, phone, and location (saved for all future resumes)
 2. **My Docs** — paste your career timeline and skills/achievements (pre-filled with example templates on first visit)
