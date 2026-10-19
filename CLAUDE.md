@@ -90,7 +90,7 @@ python -m resume_builder.cli --jd "..." --html-only
 
 **If bullet selection isn't relevant enough**: Edit `resume_builder/prompts/system.txt` — particularly the rules around relevance and omission.
 
-**To change the web UI visual style**: Edit `web_app/templates/base.html`. Uses the warm stone palette from `norangio-home` (light by default). Auto dark mode is wired via a `@media (prefers-color-scheme: dark)` block in the same file that re-points the same `--bg-*`, `--text-*`, `--border-*`, banner, and button-hover tokens to a stone-950/900/800 scale — no toggle, no JS, follows the OS.
+**To change the web UI visual style**: Edit `web_app/templates/base.html`. It links the shared `norangio.dev/shared/v1/theme.css` (type and canonical tokens) and then overrides colours with the navy palette used by norangio.dev and the hub: `--action` `#4aa8ff` for primary buttons and the brand mark, `--accent` `#9fd4ff` for links and the active nav item. Dark only, like the homepage and hub. Square corners, no shadows.
 
 **To change the PDF resume style**: Edit `templates/resume.html.j2`. The accent color there is `#1a5fa8` (blue — intentionally different from the web UI; PDFs are professional documents). Use `--html-only` to iterate quickly without Playwright.
 

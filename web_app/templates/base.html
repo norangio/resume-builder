@@ -6,71 +6,48 @@
     <title>{% block title %}Resume Builder · norangio{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <meta name="color-scheme" content="light dark">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#060a10">
+    <!-- Shared norangio theme: single source of truth for type and tokens. -->
+    <link rel="stylesheet" href="https://norangio.dev/shared/v1/theme.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+        /* Navy palette matching norangio.dev and the hub. The shared theme
+           (linked above) supplies type and the canonical tokens; colours are
+           overridden here. Dark only, like the homepage and hub. */
         :root {
-            --bg-base: #fafaf9;
-            --bg-surface: #ffffff;
-            --bg-surface-hover: #f5f5f4;
-            --bg-subtle: #fafaf9;
-            --border: #e7e5e4;
-            --border-strong: #d6d3d1;
-            --border-subtle: #f5f5f4;
-            --text-primary: #1c1917;
-            --text-secondary: #44403c;
-            --text-muted: #78716c;
-            --text-faint: #a8a29e;
-            --accent: #1c1917;
-            --positive: #10b981;
-            --warning: #d97706;
-            --danger: #e11d48;
-            --positive-bg: #ecfdf5;
-            --positive-border: #a7f3d0;
-            --positive-text: #064e3b;
-            --warning-bg: #fffbeb;
-            --warning-border: #fcd34d;
-            --warning-text: #78350f;
-            --danger-bg: #fff1f2;
-            --danger-border: #fecaca;
-            --danger-text: #881337;
-            --btn-primary-hover: #2a2522;
+            --bg-base: #060a10;
+            --bg-surface: #0a0f17;
+            --bg-surface-hover: #111926;
+            --bg-subtle: #060a10;
+            --border: #1c2738;
+            --border-strong: #26344a;
+            --border-subtle: #111926;
+            --text-primary: #e6edf6;
+            --text-secondary: #b8c4d4;
+            --text-muted: #8595ab;
+            --text-faint: #5b6b83;
+            --accent: #9fd4ff;
+            --accent-soft: rgba(74, 168, 255, 0.14);
+            --action: #4aa8ff;
+            --action-hover: #6bb8ff;
+            --on-action: #060a10;
+            --positive: #5ef0d2;
+            --warning: #fbbf24;
+            --danger: #f87171;
+            --positive-bg: rgba(94, 240, 210, 0.08);
+            --positive-border: rgba(94, 240, 210, 0.3);
+            --positive-text: #5ef0d2;
+            --warning-bg: rgba(251, 191, 36, 0.08);
+            --warning-border: rgba(251, 191, 36, 0.3);
+            --warning-text: #fcd34d;
+            --danger-bg: rgba(248, 113, 113, 0.08);
+            --danger-border: rgba(248, 113, 113, 0.35);
+            --danger-text: #fca5a5;
             --radius: 0;
             --radius-sm: 0;
-            --font: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-            --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-base: #0c0a09;
-                --bg-surface: #1c1917;
-                --bg-surface-hover: #292524;
-                --bg-subtle: #0c0a09;
-                --border: #292524;
-                --border-strong: #44403c;
-                --border-subtle: #1c1917;
-                --text-primary: #fafaf9;
-                --text-secondary: #d6d3d1;
-                --text-muted: #a8a29e;
-                --text-faint: #78716c;
-                --accent: #fafaf9;
-                --positive: #34d399;
-                --warning: #fbbf24;
-                --danger: #fb7185;
-                --positive-bg: rgba(16, 185, 129, 0.12);
-                --positive-border: rgba(16, 185, 129, 0.35);
-                --positive-text: #6ee7b7;
-                --warning-bg: rgba(217, 119, 6, 0.14);
-                --warning-border: rgba(217, 119, 6, 0.4);
-                --warning-text: #fcd34d;
-                --danger-bg: rgba(225, 29, 72, 0.14);
-                --danger-border: rgba(225, 29, 72, 0.4);
-                --danger-text: #fda4af;
-                --btn-primary-hover: #e7e5e4;
-            }
         }
 
         body {
@@ -105,8 +82,8 @@
             width: 32px;
             height: 32px;
             border-radius: var(--radius-sm);
-            background: var(--text-primary);
-            color: var(--bg-surface);
+            background: var(--action);
+            color: var(--bg-base);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -149,8 +126,8 @@
         }
 
         .nav-links a.active {
-            color: var(--text-primary);
-            background: var(--bg-surface-hover);
+            color: var(--accent);
+            background: var(--accent-soft);
         }
 
         /* ─── Main ─── */
@@ -179,7 +156,7 @@
 
         p { color: var(--text-secondary); }
 
-        a { color: var(--text-primary); }
+        a { color: var(--accent); }
 
         .card {
             background: var(--bg-surface);
@@ -226,7 +203,7 @@
 
         input:focus, textarea:focus {
             outline: none;
-            border-color: var(--text-primary);
+            border-color: var(--action);
         }
 
         .btn {
@@ -249,10 +226,10 @@
         }
 
         .btn-primary {
-            background: var(--text-primary);
-            color: var(--bg-surface);
+            background: var(--action);
+            color: var(--on-action);
         }
-        .btn-primary:hover { background: var(--btn-primary-hover); color: var(--bg-surface); }
+        .btn-primary:hover { background: var(--action-hover); color: var(--on-action); }
         .btn-primary:disabled {
             background: var(--bg-surface-hover);
             color: var(--text-faint);
@@ -260,7 +237,7 @@
         }
 
         .btn-primary:focus-visible, .btn-secondary:focus-visible, .btn-danger:focus-visible {
-            outline: 2px solid var(--text-primary);
+            outline: 2px solid var(--action);
             outline-offset: 2px;
         }
 
@@ -358,7 +335,7 @@
             display: inline-block;
             width: 18px; height: 18px;
             border: 2.5px solid var(--border);
-            border-top-color: var(--text-primary);
+            border-top-color: var(--action);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
             vertical-align: middle;
