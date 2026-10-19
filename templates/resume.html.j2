@@ -224,7 +224,7 @@
   <div class="edu-entry">
     <div class="edu-left">
       <div class="edu-institution">{{ edu.institution }}</div>
-      <div class="edu-degrees">{{ edu.degrees | join(' &nbsp;|&nbsp; ') }}</div>
+      <div class="edu-degrees">{% for deg in edu.degrees %}{{ deg }}{% if not loop.last %} &nbsp;|&nbsp; {% endif %}{% endfor %}</div>
     </div>
     <div class="edu-location">{{ edu.location }}</div>
   </div>

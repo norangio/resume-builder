@@ -13,7 +13,8 @@ class Settings(BaseSettings):
     )
 
     anthropic_api_key: str = Field(..., alias="ANTHROPIC_API_KEY")
-    model: str = Field("claude-opus-4-6", alias="CLAUDE_MODEL")
+    model: str = Field("claude-opus-5-5", alias="CLAUDE_MODEL")
+    effort: str = Field("high", alias="CLAUDE_EFFORT")
 
     candidate_name: str = Field("", alias="CANDIDATE_NAME")
     candidate_email: str = Field("", alias="CANDIDATE_EMAIL")

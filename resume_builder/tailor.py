@@ -82,13 +82,27 @@ def tailor_resume(
     system_prompt = (settings.prompts_dir / "system.txt").read_text()
 
     client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
-    response = client.messages.create(
+    # Thinking is always on for Opus 5.5, so the response starts with a thinking
+    # block and needs headroom beyond the JSON itself. Streaming avoids HTTP
+    # timeouts at this max_tokens. fallbacks="default" re-runs a safety-classifier
+    # decline on Anthropic's recommended fallback model instead of failing.
+    with client.beta.messages.stream(
         model=settings.model,
-        max_tokens=4096,
+        max_tokens=32000,
+        output_config={"effort": settings.effort},
+        betas=["server-side-fallback-2026-07-01"],
+        fallbacks="default",
         system=system_prompt,
         messages=[{"role": "user", "content": user_prompt}],
-    )
+    ) as stream:
+        response = stream.get_final_message()
 
-    raw = _strip_markdown_fences(response.content[0].text)
+    if response.stop_reason == "refusal":
+        raise RuntimeError("Claude declined to generate this resume. Try editing the job description.")
+    if response.stop_reason == "max_tokens":
+        raise RuntimeError("Claude's response was cut off before the resume was complete. Try again.")
+
+    text = "".join(block.text for block in response.content if block.type == "text")
+    raw = _strip_markdown_fences(text)
     content = ResumeContent.model_validate_json(raw)
     return _remove_em_dashes(content)

@@ -18,7 +18,7 @@ You can self-host this on any VPS. See the [deployment section](#deployment) bel
 ## Prerequisites
 
 - Python 3.11+
-- An [Anthropic API key](https://console.anthropic.com/) with access to the model you want to use (default: `claude-opus-4-6`)
+- An [Anthropic API key](https://console.anthropic.com/) with access to the model you want to use (default: `claude-opus-5-5`)
 
 **Note on API costs**: Each resume generation makes one Claude API call with your full career docs as context. With Opus, this typically costs $0.20–0.50 per run depending on how detailed your career docs are.
 
@@ -48,7 +48,8 @@ Open `.env` and fill in:
 
 ```
 ANTHROPIC_API_KEY=sk-ant-...   # Your Anthropic API key
-CLAUDE_MODEL=claude-opus-4-6   # Or claude-sonnet-4-6 for faster/cheaper runs
+CLAUDE_MODEL=claude-opus-5-5   # Or claude-sonnet-5-5 for faster/cheaper runs
+CLAUDE_EFFORT=high             # low | medium | high | xhigh | max
 
 CANDIDATE_NAME=Jane Smith
 CANDIDATE_EMAIL=jane@example.com
@@ -133,12 +134,12 @@ Open `http://localhost:8000` in a browser. The server binds to loopback only, wh
 1. **Profile** — enter your name, email, phone, and location (saved for all future resumes)
 2. **My Docs** — paste your career timeline and skills/achievements (pre-filled with example templates on first visit)
 3. **Generate** — paste a job description and hit Generate
-4. **Review** — edit the summary, skills, and bullet points in a structured form
+4. **Review** — edit the summary, skills, bullets, role details, and education in a structured form. Save the draft, preview the rendered resume in a new tab, or download the PDF
 5. **Download PDF** — tap the button, get your resume
 
 After initial setup, the typical flow is just: paste job description, generate, review, download.
 
-The review screen uses a wider desktop layout and larger default editing fields so longer summaries, skill lists, and bullets are easier to inspect before exporting.
+The review screen uses a wider desktop layout and larger default editing fields so longer summaries, skill lists, and bullets are easier to inspect before exporting. Drafts are saved to disk under `drafts/<username>/`, survive restarts, and are listed under **Recent drafts** on the Generate page so you can reopen and re-export them.
 
 ### Adding More Users
 
@@ -384,7 +385,7 @@ cd /opt/resume-builder && source .venv/bin/activate && python add_user.py newuse
 
 **Claude's selection behavior**: Edit `resume_builder/prompts/system.txt` to change how Claude picks bullets, writes summaries, or handles relevance.
 
-**Claude model**: Set `CLAUDE_MODEL` in `.env` to use a different model (e.g. `claude-sonnet-4-6` for faster/cheaper runs).
+**Claude model**: Set `CLAUDE_MODEL` in `.env` to use a different model (e.g. `claude-sonnet-5-5` for faster/cheaper runs). `CLAUDE_EFFORT` sets the thinking effort (default `high`).
 
 ## Project Structure
 

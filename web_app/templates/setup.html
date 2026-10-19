@@ -7,6 +7,12 @@
     Write in markdown — include everything, and Claude will pick what's relevant for each job.
 </p>
 
+{% if is_example and not flash_message %}
+<div class="banner banner-warning">
+    These boxes hold example docs to show the format. Replace them with your own history, then save.
+</div>
+{% endif %}
+
 <form method="post">
     <div class="card">
         <label for="timeline">Career Timeline</label>

@@ -30,7 +30,7 @@ output/resume_<timestamp>.pdf
 | File | Purpose |
 |------|---------|
 | `resume_builder/schema.py` | Pydantic models — the contract between LLM output, user editing, and template rendering |
-| `resume_builder/tailor.py` | Claude API call + JSON validation |
+| `resume_builder/tailor.py` | Claude API call (streamed, `fallbacks="default"`, refusal/max_tokens handling) + JSON validation |
 | `resume_builder/cli.py` | Entry point — run with `python -m resume_builder.cli` |
 | `resume_builder/prompts/system.txt` | System prompt — edit this to tune Claude's selection behavior |
 | `resume_builder/prompts/user_template.txt` | Jinja2 template for the user message sent to Claude |
@@ -39,7 +39,7 @@ output/resume_<timestamp>.pdf
 | `career_docs/` | User's career history markdown files (gitignored; example templates tracked) |
 | `web_app/app.py` | FastAPI web app — all routes for the browser-based workflow |
 | `web_app/auth.py` | HTTP Basic Auth handling |
-| `web_app/user_data.py` | Per-user profile and career doc storage (flat files under `users/`) |
+| `web_app/user_data.py` | Per-user profile, career docs (`users/`), and disk-backed drafts (`drafts/<username>/<uuid>.json` + `.meta.json`) |
 | `web_app/templates/` | Mobile-first HTML templates for the web UI |
 | `add_user.py` | CLI helper to create web app user accounts |
 | `run_web.py` | Web app entry point (`uvicorn` on `127.0.0.1:8000`) |
@@ -49,7 +49,8 @@ output/resume_<timestamp>.pdf
 Requires a `.env` file (copy from `.env.example`):
 ```
 ANTHROPIC_API_KEY=sk-ant-...
-CLAUDE_MODEL=claude-opus-4-6
+CLAUDE_MODEL=claude-opus-5-5
+CLAUDE_EFFORT=high
 CANDIDATE_NAME=Your Name
 CANDIDATE_EMAIL=you@example.com
 CANDIDATE_PHONE=(555) 000-0000
@@ -74,6 +75,13 @@ python -m resume_builder.cli --draft drafts/resume_draft_xyz.json
 python -m resume_builder.cli --jd "..." --html-only
 ```
 
+## Claude API Notes
+
+- Default model is `claude-opus-5-5` (`CLAUDE_MODEL`), effort `high` (`CLAUDE_EFFORT`). Requires `anthropic>=1.15`.
+- Opus 5.5 always thinks, so the response starts with a thinking block. Text is collected from every `text` block, never `content[0]`.
+- The call streams with `max_tokens=32000` and opts into server-side fallback (`server-side-fallback-2026-07-01`, `fallbacks="default"`). A final `refusal` or `max_tokens` stop raises a readable error that the web app shows.
+- `CLAUDE_MODEL` in a deployed `.env` overrides the code default. Check it when bumping models.
+
 ## Tuning Guidance
 
 **If the PDF is overflowing to 3 pages**: Tighten `@page` margins in `templates/resume.html.j2`, reduce `font-size` on body or bullets, or reduce `line-height`. Also check that Claude isn't producing >5 bullets per role.
@@ -92,7 +100,11 @@ Run locally with `python run_web.py` → `http://localhost:8000`. The web proces
 
 Per-user data lives in `users/<username>/` — profile, career docs, and drafts are all isolated per account.
 
-The review step uses a wider desktop layout with larger default textareas for summary, skills, and experience bullets so long edits are easier to make without constant manual resizing.
+The review step uses a wider desktop layout with larger default textareas. Every field is editable, including role company/title/dates/location and education. Form fields are keyed by row index (`exp_<i>_company`, `exp_<i>_bullet`, `edu_<i>_degree`, ...) so removing a role cannot shift data into the wrong entry. A sticky action bar offers Save draft, Preview (rendered HTML in a new tab), and Download PDF (named `<Name>_Resume.pdf`).
+
+Drafts are written to disk on generation and on every review submit, so they survive restarts. Only in-flight generations live in memory (`_jobs`). The Generate page lists the 10 most recent drafts and shows a getting-started checklist until the profile and career docs are filled in. Untouched example career docs do not count as set up.
+
+Auth is deliberately per-app HTTP Basic Auth, not the shared norangio SSO. The SSO is a single owner login, so outside users (friends, family) get their own `add_user.py` account here and see only their own data.
 
 ## VPS Deployment
 
@@ -115,4 +127,4 @@ The review step uses a wider desktop layout with larger default textareas for su
 - Resume must fit on exactly 2 pages — this is enforced via prompt instructions (max 5 bullets/role, max 5 roles) and CSS print rules
 - Contact info is injected from `.env` config, never passed through Claude
 - `output/` and `drafts/` are gitignored — PDFs and drafts don't get committed
-- `career_docs/*.md` files are gitignored (personal info) — only `.example.md` templates are tracked
+- `career_docs/*.md` and any `career_docs_*/` folder are gitignored (personal info) — only `.example.md` templates are tracked

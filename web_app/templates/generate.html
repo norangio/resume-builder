@@ -3,25 +3,54 @@
 {% block content %}
 <h1>Generate Resume</h1>
 
-{% if not has_docs %}
-<div class="banner banner-warning">
-    You haven't set up your career docs yet. <a href="/setup">Set them up now</a> — Claude needs them to build your resume.
+{% if not has_docs or not has_profile_data %}
+<h2 style="margin-top:0;">Getting started</h2>
+<div class="ledger">
+    <a class="ledger-row" href="/profile">
+        <span class="ledger-key">01</span>
+        <span class="ledger-main">
+            <span class="ledger-title">Add your contact info</span>
+            <span class="ledger-sub">Name, email, phone and location for the resume header.</span>
+        </span>
+        {% if has_profile_data %}<span class="status-done">Done</span>{% else %}<span class="status-todo">To do</span>{% endif %}
+    </a>
+    <a class="ledger-row" href="/setup">
+        <span class="ledger-key">02</span>
+        <span class="ledger-main">
+            <span class="ledger-title">Write your career docs</span>
+            <span class="ledger-sub">Your full work history and skills. Claude picks what fits each job.</span>
+        </span>
+        {% if has_docs %}<span class="status-done">Done</span>{% else %}<span class="status-todo">To do</span>{% endif %}
+    </a>
+    <div class="ledger-row">
+        <span class="ledger-key">03</span>
+        <span class="ledger-main">
+            <span class="ledger-title">Paste a job description below</span>
+            <span class="ledger-sub">You review and edit the draft before downloading the PDF.</span>
+        </span>
+    </div>
 </div>
 {% endif %}
 
-{% if not has_profile_data %}
-<div class="banner banner-warning">
-    Your profile is incomplete. <a href="/profile">Add your contact info</a> so it appears on your resume.
-</div>
-{% endif %}
-
-<form method="post" class="card">
+<form method="post" action="/generate" class="card">
     <label for="jd">Job Description</label>
     <p class="help-text">Paste the full job posting. Claude will tailor your resume to match.</p>
     <textarea id="jd" name="jd" rows="14" required placeholder="Paste the job description here..."></textarea>
 
-    <button type="submit" class="btn btn-primary btn-full" {% if not has_docs or not has_profile_data %}disabled title="Set up your career docs and profile first"{% endif %}>
+    <button type="submit" class="btn btn-primary btn-full" {% if not has_docs or not has_profile_data %}disabled title="Finish the getting-started steps first"{% endif %}>
         Generate Resume
     </button>
 </form>
+
+{% if drafts %}
+<h2>Recent drafts</h2>
+<div class="ledger">
+    {% for d in drafts %}
+    <a class="ledger-row" href="/review/{{ d.id }}">
+        <span class="ledger-main"><span class="ledger-title">{{ d.label or "Untitled" }}</span></span>
+        <span class="ledger-meta">{{ (d.updated or d.created or "")[:16] | replace("T", " ") }}</span>
+    </a>
+    {% endfor %}
+</div>
+{% endif %}
 {% endblock %}

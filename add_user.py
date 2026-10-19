@@ -26,6 +26,8 @@ def main() -> None:
     else:
         users = {}
 
+    existed = username in users
+
     # Hash password and save
     hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
     users[username] = hashed
@@ -35,7 +37,7 @@ def main() -> None:
     user_dir = USERS_DIR / username / "career_docs"
     user_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"{'Updated' if username in users else 'Added'} user: {username}")
+    print(f"{'Updated' if existed else 'Added'} user: {username}")
     print(f"User directory: {USERS_DIR / username}")
 
 

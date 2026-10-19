@@ -17,7 +17,7 @@
     <label for="location">Location</label>
     <input type="text" id="location" name="location" value="{{ profile.get('location', '') }}" placeholder="City, ST" required>
 
-    <label for="linkedin">LinkedIn URL <span style="font-weight:normal;color:#666">(optional)</span></label>
+    <label for="linkedin">LinkedIn URL <span class="muted" style="font-weight:normal;">(optional)</span></label>
     <input type="text" id="linkedin" name="linkedin" value="{{ profile.get('linkedin', '') }}" placeholder="linkedin.com/in/yourname">
 
     <button type="submit" class="btn btn-primary btn-full">Save Profile</button>
