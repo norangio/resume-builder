@@ -174,17 +174,21 @@ def _run_generation(draft_id: str, username: str, jd: str) -> None:
     """Run Claude generation in a worker thread and save the draft to disk."""
     try:
         docs = load_career_docs(username)
+        if docs is None:
+            raise RuntimeError("Set up your career docs before generating.")
         profile = load_profile(username)
 
         content = tailor_resume(
             job_description=jd,
-            timeline=docs[0] if docs else None,
-            skills_doc=docs[1] if docs else None,
-            candidate_name=profile.get("name"),
-            candidate_email=profile.get("email"),
-            candidate_phone=profile.get("phone"),
-            candidate_location=profile.get("location"),
-            candidate_linkedin=profile.get("linkedin") or None,
+            timeline=docs[0],
+            skills_doc=docs[1],
+            # Pass "" rather than None so a blank profile field never falls back
+            # to the CLI's CANDIDATE_* values from .env (the server owner's details).
+            candidate_name=profile.get("name", ""),
+            candidate_email=profile.get("email", ""),
+            candidate_phone=profile.get("phone", ""),
+            candidate_location=profile.get("location", ""),
+            candidate_linkedin=profile.get("linkedin", ""),
         )
         save_draft(username, draft_id, content, label=_jd_label(jd))
         _jobs[draft_id]["status"] = "ready"

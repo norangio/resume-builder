@@ -72,11 +72,11 @@ def tailor_resume(
         career_timeline=timeline,
         skills_and_achievements=skills_doc,
         json_schema=json.dumps(ResumeContent.model_json_schema(), indent=2),
-        candidate_name=candidate_name or settings.candidate_name,
-        candidate_email=candidate_email or settings.candidate_email,
-        candidate_phone=candidate_phone or settings.candidate_phone,
-        candidate_location=candidate_location or settings.candidate_location,
-        candidate_linkedin=candidate_linkedin or settings.candidate_linkedin,
+        candidate_name=settings.candidate_name if candidate_name is None else candidate_name,
+        candidate_email=settings.candidate_email if candidate_email is None else candidate_email,
+        candidate_phone=settings.candidate_phone if candidate_phone is None else candidate_phone,
+        candidate_location=settings.candidate_location if candidate_location is None else candidate_location,
+        candidate_linkedin=settings.candidate_linkedin if candidate_linkedin is None else candidate_linkedin,
     )
 
     system_prompt = (settings.prompts_dir / "system.txt").read_text()
