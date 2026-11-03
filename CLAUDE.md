@@ -61,6 +61,8 @@ Virtual environment: `.venv/` — activate with `source .venv/bin/activate` or p
 
 Playwright Chromium is already installed. If re-installing: `playwright install chromium`.
 
+`exporter.py` launches Chromium with its sandbox on under macOS only. On the VPS the systemd unit's `RestrictNamespaces=yes` (plus AppArmor's userns restriction) makes a sandboxed Chromium fail to launch, so it runs unsandboxed inside the systemd sandbox. Don't force `chromium_sandbox=True` on Linux.
+
 ## Running the Tool
 
 ```bash
